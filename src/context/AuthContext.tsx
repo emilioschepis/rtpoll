@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { createContext, ReactNode, useContext, useEffect, useReducer } from "react";
 
 import supabase from "../supabase";
+import { verifyMagicLinkHash } from "../utils/magicLink";
 
 type State = { loading: boolean; user: User | null };
 type Action = { type: "setAuthenticated"; payload: { user: User } } | { type: "setUnauthenticated" };
@@ -28,8 +29,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const user = supabase.auth.user();
     if (user) {
       dispatch({ type: "setAuthenticated", payload: { user } });
-    } else if (localStorage.getItem("supabase.auth.token")) {
-      // An authentication token is available but the user is not defined yet.
+    } else if (verifyMagicLinkHash()) {
+      // The current hash includes a magic link.
       // The authentication status will be set by the `onAuthStateChange` subscription.
       // https://github.com/supabase/gotrue-js/issues/143
     } else {
