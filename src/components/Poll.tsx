@@ -1,6 +1,7 @@
-import { Box, Spinner } from "@chakra-ui/react";
+import { Box, Heading, Spinner } from "@chakra-ui/react";
 
 import { usePoll } from "../query/hooks";
+import Votes from "./Votes";
 
 type Props = {
   pollId: string;
@@ -23,7 +24,8 @@ const Poll = ({ pollId: id }: Props) => {
 
   return (
     <Box>
-      <pre>{JSON.stringify(poll, null, 2)}</pre>
+      <Heading as="h1">{poll.title}</Heading>
+      <Votes pollId={id} choices={poll.choices} />
     </Box>
   );
 };
