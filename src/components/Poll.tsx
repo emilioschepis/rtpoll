@@ -1,13 +1,13 @@
 import { Box, Spinner } from "@chakra-ui/react";
 
-import { useRTPoll } from "../query/hooks";
+import { usePoll } from "../query/hooks";
 
 type Props = {
   pollId: string;
 };
 
 const Poll = ({ pollId: id }: Props) => {
-  const { isLoading, error, data: poll } = useRTPoll(id);
+  const { isLoading, error, data: poll } = usePoll(id);
 
   if (error) {
     return <Box>{error.message}</Box>;

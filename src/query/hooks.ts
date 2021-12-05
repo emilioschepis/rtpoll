@@ -1,8 +1,7 @@
 import { PostgrestError } from "@supabase/postgrest-js";
-import { useEffect } from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 
-import { IPoll } from "../models";
+import { IUsePoll } from "../models";
 import supabase from "../supabase";
 
 enum Key {
@@ -10,8 +9,12 @@ enum Key {
 }
 
 export const usePoll = (id: string) =>
-  useQuery<IPoll | null, PostgrestError>([Key.GET_POLL, id], async () => {
-    const { data, error } = await supabase.from<IPoll>("polls").select("*").eq("id", id).maybeSingle();
+  useQuery<IUsePoll | null, PostgrestError>([Key.GET_POLL, id], async () => {
+    const { data, error } = await supabase
+      .from("polls")
+      .select("id, title, description, choices!fk_poll (id, title)")
+      .eq("id", id)
+      .maybeSingle();
 
     if (error) {
       throw error;
@@ -19,23 +22,3 @@ export const usePoll = (id: string) =>
 
     return data;
   });
-
-export const useRTPoll = (id: string) => {
-  const query = usePoll(id);
-  const queryClient = useQueryClient();
-
-  useEffect(() => {
-    const subscription = supabase
-      .from<IPoll>(`polls:id=eq.${id}`)
-      .on("UPDATE", (payload) => {
-        queryClient.setQueryData([Key.GET_POLL, id], payload.new);
-      })
-      .subscribe();
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [id, queryClient]);
-
-  return query;
-};
