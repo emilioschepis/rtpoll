@@ -1,7 +1,8 @@
-import { Avatar, Box, Flex, Skeleton, Text } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, Skeleton, Text } from "@chakra-ui/react";
 
+import { useGuaranteedUser } from "../context/AuthContext";
 import { IUsePoll } from "../models";
-import { useWatchVotes } from "../query/hooks";
+import { useVote, useWatchVotes } from "../query/hooks";
 
 type Props = {
   pollId: string;
@@ -9,7 +10,9 @@ type Props = {
 };
 
 const Votes = ({ pollId, choices }: Props) => {
+  const user = useGuaranteedUser();
   const { isLoading, error, data: votes } = useWatchVotes(pollId);
+  const { mutate: vote, isLoading: isVoting } = useVote(pollId);
 
   if (error) {
     return <Box>{error.message}</Box>;
@@ -19,6 +22,7 @@ const Votes = ({ pollId, choices }: Props) => {
     <Flex>
       {choices.map((choice) => {
         const votesForChoice = votes?.filter((vote) => vote.choice_id === choice.id) ?? [];
+        const isCurrentUserChoice = votesForChoice.find((vote) => vote.voter.id === user.id) !== undefined;
 
         return (
           <Skeleton key={choice.id} isLoaded={!isLoading}>
@@ -32,6 +36,9 @@ const Votes = ({ pollId, choices }: Props) => {
                   src={vote.voter.image_url ?? undefined}
                 />
               ))}
+              <Button isLoading={isVoting} disabled={isCurrentUserChoice} onClick={() => vote(choice.id)}>
+                Vote for this
+              </Button>
             </Flex>
           </Skeleton>
         );

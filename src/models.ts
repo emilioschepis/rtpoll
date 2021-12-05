@@ -31,6 +31,7 @@ export type IUsePoll = {
 export type IUseWatchVotes = {
   choice_id: string;
   voter: {
+    id: string;
     email: string;
     name: string | null;
     image_url: string | null;

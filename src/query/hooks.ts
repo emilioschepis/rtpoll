@@ -1,13 +1,18 @@
 import { PostgrestError } from "@supabase/postgrest-js";
 import { useEffect } from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
+import { useGuaranteedUser } from "../context/AuthContext";
 import { IUsePoll, IUseWatchVotes } from "../models";
 import supabase from "../supabase";
 
 enum Key {
+  // Queries
   GET_POLL = "GET_POLL",
   WATCH_VOTES = "WATCH_VOTES",
+
+  // Mutations
+  VOTE = "VOTE",
 }
 
 export const usePoll = (id: string) =>
@@ -25,12 +30,25 @@ export const usePoll = (id: string) =>
     return data;
   });
 
+export const useVote = (pollId: string) => {
+  const user = useGuaranteedUser();
+  const mutation = useMutation<void, PostgrestError, string>([Key.VOTE, pollId], async (choiceId) => {
+    const { error } = await supabase.from("votes").upsert({ voter_id: user.id, choice_id: choiceId, poll_id: pollId });
+
+    if (error) {
+      throw error;
+    }
+  });
+
+  return mutation;
+};
+
 export const useWatchVotes = (pollId: string) => {
   const queryClient = useQueryClient();
   const query = useQuery<IUseWatchVotes, PostgrestError>([Key.WATCH_VOTES, pollId], async () => {
     const { data, error } = await supabase
       .from("votes")
-      .select("choice_id, voter:users (email, name, image_url)")
+      .select("choice_id, voter:users (id, email, name, image_url)")
       .eq("poll_id", pollId);
 
     if (error) {
