@@ -12,7 +12,7 @@ type Props = {
 const Votes = ({ pollId, choices }: Props) => {
   const user = useGuaranteedUser();
   const { isLoading, error, data: votes } = useWatchVotes(pollId);
-  const { mutate: vote, isLoading: isVoting } = useVote(pollId);
+  const { mutate: vote, isLoading: isVoting, variables } = useVote(pollId);
 
   if (error) {
     return <Box>{error.message}</Box>;
@@ -36,7 +36,11 @@ const Votes = ({ pollId, choices }: Props) => {
                   src={vote.voter.image_url ?? undefined}
                 />
               ))}
-              <Button isLoading={isVoting} disabled={isCurrentUserChoice} onClick={() => vote(choice.id)}>
+              <Button
+                isLoading={isVoting && variables === choice.id}
+                disabled={isCurrentUserChoice}
+                onClick={() => vote(choice.id)}
+              >
                 Vote for this
               </Button>
             </Flex>
