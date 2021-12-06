@@ -13,7 +13,7 @@ const NewPage: NextPage = () => {
   const auth = useRequiredAuth();
   const [error, setError] = useState<string | null>(null);
 
-  async function submit(title: string, description: string | null) {
+  async function submit(title: string, description: string | null, choices: { title: string }[]) {
     setError(null);
 
     const randomId = generateId();
@@ -24,14 +24,9 @@ const NewPage: NextPage = () => {
       return;
     }
 
-    const { error: choicesError } = await supabase.from("choices").upsert([
-      { poll_id: randomId, title: generateId(10) },
-      { poll_id: randomId, title: generateId(10) },
-      { poll_id: randomId, title: generateId(10) },
-      { poll_id: randomId, title: generateId(10) },
-      { poll_id: randomId, title: generateId(10) },
-      { poll_id: randomId, title: generateId(10) },
-    ]);
+    const { error: choicesError } = await supabase
+      .from("choices")
+      .upsert(choices.map((choice) => ({ poll_id: randomId, title: choice.title })));
 
     if (choicesError) {
       setError(choicesError.message);
@@ -53,7 +48,9 @@ const NewPage: NextPage = () => {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       ) : null}
-      <NewForm onSubmit={async ({ title, description }) => await submit(title, description ?? null)} />
+      <NewForm
+        onSubmit={async ({ title, description, choices }) => await submit(title, description ?? null, choices)}
+      />
     </Box>
   );
 };
