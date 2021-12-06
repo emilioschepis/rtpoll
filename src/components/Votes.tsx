@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Flex, Skeleton, Text } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, Skeleton, Text, Tooltip } from "@chakra-ui/react";
 
 import { useGuaranteedUser } from "../context/AuthContext";
 import { IUsePoll } from "../models";
@@ -30,11 +30,9 @@ const Votes = ({ pollId, choices }: Props) => {
               <Text>{choice.title}</Text>
               <Text>{votesForChoice.length} votes</Text>
               {votesForChoice.map((vote) => (
-                <Avatar
-                  key={vote.voter.email}
-                  name={vote.voter.name ?? vote.voter.email}
-                  src={vote.voter.image_url ?? undefined}
-                />
+                <Tooltip key={vote.voter.email} label={vote.voter.name ?? vote.voter.email}>
+                  <Avatar name={vote.voter.name ?? vote.voter.email} src={vote.voter.image_url ?? undefined} />
+                </Tooltip>
               ))}
               <Button
                 isLoading={isVoting && variables === choice.id}

@@ -3,12 +3,13 @@ import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
 import { useGuaranteedUser } from "../context/AuthContext";
-import { IUsePoll, IUseWatchVotes } from "../models";
+import { IUsePoll, IUseWatchUser, IUseWatchVotes } from "../models";
 import supabase from "../supabase";
 
 enum Key {
   // Queries
   GET_POLL = "GET_POLL",
+  WATCH_USER = "WATCH_USER",
   WATCH_VOTES = "WATCH_VOTES",
 
   // Mutations
@@ -41,6 +42,39 @@ export const useVote = (pollId: string) => {
   });
 
   return mutation;
+};
+
+export const useWatchUser = () => {
+  const user = useGuaranteedUser();
+  const queryClient = useQueryClient();
+  const query = useQuery<IUseWatchUser | null, PostgrestError>([Key.WATCH_USER, user.id], async () => {
+    const { data, error } = await supabase
+      .from("users")
+      .select("email, name, image_url")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  });
+
+  useEffect(() => {
+    const subscription = supabase
+      .from("users:id=eq." + user.id)
+      .on("*", (_) => {
+        queryClient.invalidateQueries([Key.WATCH_USER, user.id]);
+      })
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [user, queryClient]);
+
+  return query;
 };
 
 export const useWatchVotes = (pollId: string) => {
