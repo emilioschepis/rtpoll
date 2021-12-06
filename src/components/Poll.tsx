@@ -1,4 +1,5 @@
 import { Box, Heading, Spinner } from "@chakra-ui/react";
+import Head from "next/head";
 
 import { usePoll } from "../query/hooks";
 import Votes from "./Votes";
@@ -24,7 +25,11 @@ const Poll = ({ pollId: id }: Props) => {
 
   return (
     <Box>
+      <Head>
+        <title key="poll-title">{poll.title} &mdash; RT Poll</title>
+      </Head>
       <Heading as="h1">{poll.title}</Heading>
+      {poll.description ? <Heading as="h2">{poll.description}</Heading> : null}
       <Votes pollId={id} choices={poll.choices} />
     </Box>
   );

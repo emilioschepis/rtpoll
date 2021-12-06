@@ -1,4 +1,4 @@
-import { Avatar, Box, Heading, Spinner } from "@chakra-ui/react";
+import { Avatar, Box, Spinner, Text } from "@chakra-ui/react";
 
 import { useGuaranteedUser } from "../context/AuthContext";
 import { useWatchUser } from "../query/hooks";
@@ -46,7 +46,7 @@ const Profile = ({}: Props) => {
   return (
     <Box>
       <Avatar src={user.image_url ?? undefined} name={user.name ?? user.email} />
-      <Heading>{user.name ?? user.email}</Heading>
+      <Text>{user.name ?? user.email}</Text>
       <ProfileForm currentName={user.name} onSubmit={async ({ name, files }) => await submit(name, files)} />
     </Box>
   );

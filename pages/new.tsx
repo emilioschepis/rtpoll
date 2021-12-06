@@ -1,5 +1,6 @@
-import { Alert, AlertDescription, AlertIcon, Box } from "@chakra-ui/react";
+import { Alert, AlertDescription, AlertIcon, Box, Heading } from "@chakra-ui/react";
 import type { NextPage } from "next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -16,7 +17,7 @@ const NewPage: NextPage = () => {
   async function submit(title: string, description: string | null, choices: { title: string }[]) {
     setError(null);
 
-    const randomId = generateId();
+    const randomId = generateId(8);
     const { error } = await supabase.from("polls").insert({ id: randomId, user_id: auth.user!.id, title, description });
 
     if (error) {
@@ -42,12 +43,17 @@ const NewPage: NextPage = () => {
 
   return (
     <Box>
+      <Head>
+        <title>New poll &mdash; RT Poll</title>
+        <meta name="robots" content="noindex,nofollow" />
+      </Head>
       {error ? (
         <Alert status="error">
           <AlertIcon />
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       ) : null}
+      <Heading as="h1">New poll</Heading>
       <NewForm
         onSubmit={async ({ title, description, choices }) => await submit(title, description ?? null, choices)}
       />

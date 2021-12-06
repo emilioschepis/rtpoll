@@ -1,5 +1,6 @@
-import { Alert, AlertDescription, AlertIcon, Box } from "@chakra-ui/react";
+import { Alert, AlertDescription, AlertIcon, Box, Heading } from "@chakra-ui/react";
 import type { NextPage } from "next";
+import Head from "next/head";
 
 import LoginForm from "../src/components/forms/LoginForm";
 import useLogin from "../src/hooks/useLogin";
@@ -20,6 +21,10 @@ const Login: NextPage = () => {
 
   return (
     <Box>
+      <Head>
+        <title>Login &mdash; RT Poll</title>
+        <meta name="robots" content="all" />
+      </Head>
       {state.error ? (
         <Alert status="error">
           <AlertIcon />
@@ -31,6 +36,7 @@ const Login: NextPage = () => {
           <AlertDescription>{state.message}</AlertDescription>
         </Alert>
       ) : null}
+      <Heading as="h1">Login</Heading>
       <LoginForm onSubmit={async ({ email }) => await login(email)} />
     </Box>
   );

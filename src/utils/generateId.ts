@@ -5,6 +5,6 @@ import crypto from "crypto";
  *
  * @param length - The length of the generated id
  */
-export function generateId(length: number = 5) {
+export function generateId(length: number) {
   return crypto.randomBytes(length).toString("hex").slice(0, length);
 }
