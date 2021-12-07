@@ -3,13 +3,14 @@ import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
 import { useGuaranteedUser } from "../context/AuthContext";
-import { IUseCreatedPolls, IUsePoll, IUseWatchUser, IUseWatchVotes } from "../models";
+import { IUseCreatedPolls, IUsePoll, IUseVotedPolls, IUseWatchUser, IUseWatchVotes } from "../models";
 import supabase from "../supabase";
 
 enum Key {
   // Queries
   CREATED_POLLS = "CREATED_POLLS",
   GET_POLL = "GET_POLL",
+  VOTED_POLLS = "VOTED_POLLS",
   WATCH_USER = "WATCH_USER",
   WATCH_VOTES = "WATCH_VOTES",
 
@@ -56,6 +57,23 @@ export const useVote = (pollId: string) => {
   });
 
   return mutation;
+};
+
+export const useVotedPolls = () => {
+  const user = useGuaranteedUser();
+  return useQuery<IUseVotedPolls | null, PostgrestError>([Key.VOTED_POLLS], async () => {
+    const { data, error } = await supabase
+      .from("polls")
+      .select("id, title, description, votes (voter_id)")
+      .neq("user_id", user.id)
+      .eq("votes.voter_id", user.id);
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  });
 };
 
 export const useWatchUser = () => {

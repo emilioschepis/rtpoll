@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 import CreatedPolls from "../src/components/CreatedPolls";
+import VotedPolls from "../src/components/VotedPolls";
 import { useRequiredAuth } from "../src/context/AuthContext";
 
 const Home: NextPage = () => {
@@ -20,6 +21,7 @@ const Home: NextPage = () => {
       </Head>
       <Heading as="h1">RT Poll</Heading>
       <CreatedPolls />
+      <VotedPolls />
     </Box>
   );
 };

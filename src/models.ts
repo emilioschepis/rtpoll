@@ -18,6 +18,12 @@ export type IVotesTable = {
   created_at: string;
 };
 
+export type IUseCreatedPolls = {
+  id: string;
+  title: string;
+  description: string | null;
+}[];
+
 export type IUsePoll = {
   id: string;
   title: string;
@@ -28,7 +34,7 @@ export type IUsePoll = {
   }[];
 };
 
-export type IUseCreatedPolls = {
+export type IUseVotedPolls = {
   id: string;
   title: string;
   description: string | null;
