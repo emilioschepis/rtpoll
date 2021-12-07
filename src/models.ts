@@ -22,6 +22,8 @@ export type IUseCreatedPolls = {
   id: string;
   title: string;
   description: string | null;
+  created_at: string;
+  votes: { voter_id: string }[];
 }[];
 
 export type IUsePoll = {
@@ -38,6 +40,8 @@ export type IUseVotedPolls = {
   id: string;
   title: string;
   description: string | null;
+  created_at: string;
+  votes: { voter_id: string }[];
 }[];
 
 export type IUseWatchUser = {

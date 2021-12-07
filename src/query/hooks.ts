@@ -21,7 +21,11 @@ enum Key {
 export const useCreatedPolls = () => {
   const user = useGuaranteedUser();
   return useQuery<IUseCreatedPolls | null, PostgrestError>([Key.CREATED_POLLS], async () => {
-    const { data, error } = await supabase.from("polls").select("id, title, description").eq("user_id", user.id);
+    const { data, error } = await supabase
+      .from("polls")
+      .select("id, title, description, created_at, votes (voter_id)")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false });
 
     if (error) {
       throw error;
@@ -64,9 +68,10 @@ export const useVotedPolls = () => {
   return useQuery<IUseVotedPolls | null, PostgrestError>([Key.VOTED_POLLS], async () => {
     const { data, error } = await supabase
       .from("polls")
-      .select("id, title, description, votes (voter_id)")
+      .select("id, title, description, created_at, votes (voter_id)")
       .neq("user_id", user.id)
-      .eq("votes.voter_id", user.id);
+      .eq("votes.voter_id", user.id)
+      .order("created_at", { ascending: false });
 
     if (error) {
       throw error;

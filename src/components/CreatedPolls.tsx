@@ -23,6 +23,7 @@ const CreatedPolls = ({}: Props) => {
         <Box key={poll.id}>
           <Text>{poll.title}</Text>
           {poll.description ? <Text>{poll.description}</Text> : null}
+          <Text>{poll.votes.length} votes</Text>
           <NextLink href={`/p/${poll.id}`} passHref>
             <Link>View</Link>
           </NextLink>
