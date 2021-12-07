@@ -28,6 +28,12 @@ export type IUsePoll = {
   }[];
 };
 
+export type IUseCreatedPolls = {
+  id: string;
+  title: string;
+  description: string | null;
+}[];
+
 export type IUseWatchUser = {
   email: string;
   name: string | null;

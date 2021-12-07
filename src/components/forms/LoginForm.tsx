@@ -21,6 +21,7 @@ const LoginForm = ({ onSubmit }: Props) => {
         <FormLabel htmlFor="email">Email</FormLabel>
         <Input
           id="email"
+          type="email"
           placeholder="email"
           {...register("email", {
             required: "This is required",
