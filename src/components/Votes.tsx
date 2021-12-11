@@ -28,13 +28,21 @@ const Votes = ({ pollId, choices }: Props) => {
 
         return (
           <Skeleton key={choice.id} isLoaded={!isLoading}>
-            <Flex position="relative" direction="column" padding={4} rounded="lg" bg="gray.700" overflow="hidden">
+            <Flex
+              position="relative"
+              height="full"
+              direction="column"
+              padding={4}
+              rounded="lg"
+              bg="gray.700"
+              overflow="hidden"
+            >
               <Flex justifyContent="space-between" alignItems="center">
                 <Text fontSize="xl" fontWeight="bold" mb={4} zIndex={1}>
                   {choice.title}
                 </Text>
                 <Text fontWeight="bold" mb={4} zIndex={1}>
-                  {votePercentage * 100}%
+                  {Math.round(votePercentage * 100)}%
                 </Text>
               </Flex>
               <AvatarGroup zIndex={1}>
@@ -79,6 +87,7 @@ const Votes = ({ pollId, choices }: Props) => {
                 opacity="15%"
                 inset={0}
                 width={`${votePercentage * 100}%`}
+                transition="width 300ms ease-in"
               />
             </Flex>
           </Skeleton>
