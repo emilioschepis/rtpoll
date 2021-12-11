@@ -32,6 +32,7 @@ const Votes = ({ pollId, choices }: Props) => {
               position="relative"
               height="full"
               direction="column"
+              justifyContent="space-between"
               padding={4}
               rounded="lg"
               bg="gray.700"
@@ -59,7 +60,7 @@ const Votes = ({ pollId, choices }: Props) => {
                 )}
               </AvatarGroup>
 
-              <Box mt={4} borderTopWidth={2} pt={4}>
+              <Flex mt={4} borderTopWidth={2} pt={4} alignItems="center" height={12}>
                 {isCurrentUserChoice ? (
                   <Text zIndex={1}>You voted for this option</Text>
                 ) : (
@@ -80,7 +81,7 @@ const Votes = ({ pollId, choices }: Props) => {
                     Vote
                   </Button>
                 )}
-              </Box>
+              </Flex>
               <Box
                 position="absolute"
                 backgroundColor="cyan.400"
