@@ -16,7 +16,7 @@ const Poll = ({ pollId: id }: Props) => {
   }
 
   if (isLoading) {
-    return <Spinner />;
+    return null;
   }
 
   if (!poll) {
@@ -28,8 +28,14 @@ const Poll = ({ pollId: id }: Props) => {
       <Head>
         <title key="poll-title">{poll.title} &mdash; RT Poll</title>
       </Head>
-      <Heading as="h1">{poll.title}</Heading>
-      {poll.description ? <Heading as="h2">{poll.description}</Heading> : null}
+      <Heading as="h1" mb={4}>
+        {poll.title}
+      </Heading>
+      {poll.description ? (
+        <Heading as="h2" mb={4} fontSize="xl">
+          {poll.description}
+        </Heading>
+      ) : null}
       <Votes pollId={id} choices={poll.choices} />
     </Box>
   );

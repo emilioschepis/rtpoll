@@ -1,7 +1,8 @@
-import { Box, Heading, Link, Spinner, Text } from "@chakra-ui/react";
+import { Box, Grid, Heading, Link, Skeleton, Spinner, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 
 import { useVotedPolls } from "../query/hooks";
+import VotedPollItem from "./VotedPollItem";
 
 type Props = {};
 
@@ -12,22 +13,23 @@ const VotedPolls = ({}: Props) => {
     return <Box>{error.message}</Box>;
   }
 
-  if (isLoading || !polls) {
-    return <Spinner />;
-  }
-
   return (
-    <Box>
-      <Heading as="h2">Voted polls</Heading>
-      {polls.map((poll) => (
-        <Box key={poll.id}>
-          <Text>{poll.title}</Text>
-          {poll.description ? <Text>{poll.description}</Text> : null}
-          <NextLink href={`/p/${poll.id}`} passHref>
-            <Link>View</Link>
-          </NextLink>
-        </Box>
-      ))}
+    <Box my={8}>
+      <Heading as="h2" mb={4} fontSize="xl">
+        Polls you voted on
+      </Heading>
+      <Grid templateColumns={{ base: "repeat(1, 1fr)", lg: "repeat(3, 1fr)" }} gap={4}>
+        {isLoading || !polls ? (
+          <>
+            <Skeleton height="100px" rounded="lg" />
+            <Skeleton height="100px" rounded="lg" />
+            <Skeleton height="100px" rounded="lg" />
+            <Skeleton height="100px" rounded="lg" />
+          </>
+        ) : (
+          polls.map((poll) => <VotedPollItem key={poll.id} poll={poll} />)
+        )}
+      </Grid>
     </Box>
   );
 };

@@ -42,7 +42,7 @@ const NewPage: NextPage = () => {
   }
 
   return (
-    <Box>
+    <Box padding={4}>
       <Head>
         <title>New poll &mdash; RT Poll</title>
         <meta name="robots" content="noindex,nofollow" />
@@ -53,7 +53,9 @@ const NewPage: NextPage = () => {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       ) : null}
-      <Heading as="h1">New poll</Heading>
+      <Heading as="h1" mb={4}>
+        New poll
+      </Heading>
       <NewForm
         onSubmit={async ({ title, description, choices }) => await submit(title, description ?? null, choices)}
       />

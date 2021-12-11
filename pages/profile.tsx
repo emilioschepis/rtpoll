@@ -13,12 +13,14 @@ const ProfilePage: NextPage = () => {
   }
 
   return (
-    <Box>
+    <Box padding={4}>
       <Head>
         <title>Your profile &mdash; RT Poll</title>
         <meta name="robots" content="noindex,nofollow" />
       </Head>
-      <Heading as="h1">Your profile</Heading>
+      <Heading as="h1" mb={4}>
+        Your profile
+      </Heading>
       <Profile />
     </Box>
   );

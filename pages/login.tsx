@@ -1,4 +1,4 @@
-import { Alert, AlertDescription, AlertIcon, Box, Heading } from "@chakra-ui/react";
+import { Alert, AlertDescription, AlertIcon, Box, Heading, Text } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import Head from "next/head";
 
@@ -20,7 +20,7 @@ const Login: NextPage = () => {
   }
 
   return (
-    <Box>
+    <Box padding={4}>
       <Head>
         <title>Login &mdash; RT Poll</title>
         <meta name="robots" content="all" />
@@ -36,7 +36,10 @@ const Login: NextPage = () => {
           <AlertDescription>{state.message}</AlertDescription>
         </Alert>
       ) : null}
-      <Heading as="h1">Login</Heading>
+      <Heading as="h1">Welcome</Heading>
+      <Text my={4} fontWeight="semibold">
+        Start creating and sharing polls with friends and family, seeing the results in real time!
+      </Text>
       <LoginForm onSubmit={async ({ email }) => await login(email)} />
     </Box>
   );

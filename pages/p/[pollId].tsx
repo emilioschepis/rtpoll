@@ -17,7 +17,7 @@ const PollPage: NextPage = () => {
   }
 
   return (
-    <Box>
+    <Box padding={4}>
       <Head>
         <title key="poll-title">Poll &mdash; RT Poll</title>
         <meta name="robots" content="noindex,nofollow" />

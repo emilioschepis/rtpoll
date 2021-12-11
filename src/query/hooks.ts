@@ -10,6 +10,7 @@ enum Key {
   // Queries
   CREATED_POLLS = "CREATED_POLLS",
   GET_POLL = "GET_POLL",
+  GET_USER = "GET_USER",
   VOTED_POLLS = "VOTED_POLLS",
   WATCH_USER = "WATCH_USER",
   WATCH_VOTES = "WATCH_VOTES",
@@ -72,6 +73,24 @@ export const useVotedPolls = () => {
       .neq("user_id", user.id)
       .eq("votes.voter_id", user.id)
       .order("created_at", { ascending: false });
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  });
+};
+
+export const useGetUser = () => {
+  const user = useGuaranteedUser();
+
+  return useQuery<IUseWatchUser | null, PostgrestError>([Key.WATCH_USER, user.id], async () => {
+    const { data, error } = await supabase
+      .from("users")
+      .select("email, name, image_url")
+      .eq("id", user.id)
+      .maybeSingle();
 
     if (error) {
       throw error;
