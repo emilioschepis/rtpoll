@@ -48,7 +48,7 @@ const NewPage: NextPage = () => {
         <meta name="robots" content="noindex,nofollow" />
       </Head>
       {error ? (
-        <Alert status="error">
+        <Alert status="error" mb={4} rounded="lg">
           <AlertIcon />
           <AlertDescription>{error}</AlertDescription>
         </Alert>

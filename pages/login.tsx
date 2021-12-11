@@ -26,12 +26,12 @@ const Login: NextPage = () => {
         <meta name="robots" content="all" />
       </Head>
       {state.error ? (
-        <Alert status="error">
+        <Alert status="error" mb={4} rounded="lg">
           <AlertIcon />
           <AlertDescription>{state.error}</AlertDescription>
         </Alert>
       ) : state.message ? (
-        <Alert status="success">
+        <Alert status="success" mb={4} rounded="lg">
           <AlertIcon />
           <AlertDescription>{state.message}</AlertDescription>
         </Alert>
