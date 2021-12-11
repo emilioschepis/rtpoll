@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup, Box, Button, Flex, HStack, Skeleton, Text, Tooltip, VStack } from "@chakra-ui/react";
+import { Avatar, AvatarGroup, Box, Button, Flex, Grid, Skeleton, Text } from "@chakra-ui/react";
 
 import { useGuaranteedUser } from "../context/AuthContext";
 import { IUsePoll } from "../models";
@@ -20,7 +20,7 @@ const Votes = ({ pollId, choices }: Props) => {
   }
 
   return (
-    <VStack align="stretch">
+    <Grid templateColumns={{ base: "repeat(1, 1fr)", lg: "repeat(2, 1fr)" }} gap={4}>
       {choices.map((choice) => {
         const votesForChoice = votes?.filter((vote) => vote.choice_id === choice.id) ?? [];
         const isCurrentUserChoice = votesForChoice.find((vote) => vote.voter.id === user.id) !== undefined;
@@ -84,7 +84,7 @@ const Votes = ({ pollId, choices }: Props) => {
           </Skeleton>
         );
       })}
-    </VStack>
+    </Grid>
   );
 };
 
