@@ -6,7 +6,9 @@ It allows authenticated users to easily create polls with multiple options, shar
 
 RT Poll is publicly available at https://rtpoll.vercel.app/. 
 
-Built with ❤️ by Emilio & Federico.
+Built with ❤️ by
+* Emilio — [GitHub](https://github.com/emilioschepis) · [Twitter](https://twitter.com/emilioschepis)
+* Federico — no GitHub or Twitter yet
 
 ## Technologies
 
