@@ -1,12 +1,15 @@
 import { Alert, AlertDescription, AlertIcon, Box, Heading, Text } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
+import DebugLoginForm from "../src/components/forms/DebugLoginForm";
 import LoginForm from "../src/components/forms/LoginForm";
 import useLogin from "../src/hooks/useLogin";
 import supabase from "../src/supabase";
 
 const Login: NextPage = () => {
+  const router = useRouter();
   const [state, dispatch] = useLogin();
 
   async function login(email: string) {
@@ -16,6 +19,21 @@ const Login: NextPage = () => {
       dispatch({ type: "setFailed", payload: { error: error.message } });
     } else {
       dispatch({ type: "setSuccessful", payload: { message: "Please check your email for a confirmation link" } });
+    }
+  }
+
+  async function debugLogin(email: string, password: string) {
+    if (process.env.NODE_ENV !== "development") {
+      throw new Error("Debug login is only enabled in development mode");
+    }
+
+    const { error } = await supabase.auth.signIn({ email, password });
+
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.warn("Error during login:", error);
+    } else {
+      router.replace("/");
     }
   }
 
@@ -40,7 +58,12 @@ const Login: NextPage = () => {
       <Text my={4} fontWeight="semibold">
         Start creating and sharing polls with friends and family, seeing the results in real time!
       </Text>
-      <LoginForm onSubmit={async ({ email }) => await login(email)} />
+
+      {process.env.NODE_ENV === "development" ? (
+        <DebugLoginForm onSubmit={async ({ email, password }) => await debugLogin(email, password)} />
+      ) : (
+        <LoginForm onSubmit={async ({ email }) => await login(email)} />
+      )}
     </Box>
   );
 };
