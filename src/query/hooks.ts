@@ -69,7 +69,7 @@ export const useVotedPolls = () => {
   return useQuery<IUseVotedPolls | null, PostgrestError>([Key.VOTED_POLLS], async () => {
     const { data, error } = await supabase
       .from("polls")
-      .select("id, title, description, created_at, votes (voter_id)")
+      .select("id, title, description, created_at, votes!inner(voter_id)")
       .neq("user_id", user.id)
       .eq("votes.voter_id", user.id)
       .order("created_at", { ascending: false });
